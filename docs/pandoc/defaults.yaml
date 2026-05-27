@@ -4,11 +4,11 @@ pdf-engine: xelatex
 variables:
   documentclass: article
   fontsize: 11pt
-  geometry: margin=2.2cm
+  geometry: "top=2cm, bottom=2.2cm, left=2.2cm, right=2.2cm"
   colorlinks: true
-  linkcolor: blue
-  urlcolor: blue
-  toc: true
-  toc-depth: 3
-  numbersections: true
+  linkcolor: "0,102,180"
+  urlcolor: "0,102,180"
+  toc: false
+  numbersections: false
   papersize: a4
+  linestretch: 1.15

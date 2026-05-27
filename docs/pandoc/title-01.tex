@@ -1,0 +1,24 @@
+\begin{titlepage}
+  \newgeometry{margin=0pt}
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[CVMBlueDark] (current page.south west) rectangle (current page.north east);
+    \fill[CVMAccent] ([yshift=-6cm]current page.north west) --
+      ([yshift=-14cm]current page.north east) -- (current page.south east) -- cycle;
+    \fill[white,opacity=0.08] ([xshift=2cm,yshift=-3cm]current page.north west) circle (4cm);
+    \fill[white,opacity=0.06] ([xshift=-3cm,yshift=4cm]current page.south east) circle (5cm);
+  \end{tikzpicture}
+  \restoregeometry
+  \vspace*{2.2cm}
+  \begin{center}
+    {\sffamily\fontsize{42}{48}\selectfont\bfseries\color{white} CVM\texttt{++}}\\[0.4cm]
+    {\sffamily\Large\color{white!85} Project \& Build Guide}\\[1.8cm]
+    {\sffamily\large\color{white!90}
+      Setup \textbullet\ Structure \textbullet\ Glossary \textbullet\ Step-by-step build path}\\[2.5cm]
+    {\ttfamily\color{white!75}
+      .cvm \textrightarrow\ Lexer \textrightarrow\ Parser \textrightarrow\ Compiler \textrightarrow\ VM}\\[3cm]
+    {\sffamily\color{white!70} github.com/Dragon9-9/cvmpp}\\[0.3cm]
+    {\sffamily\color{white!55} May 2026}
+  \end{center}
+\end{titlepage}
+\newpage
+\setcounter{page}{1}

@@ -1,14 +1,121 @@
+% CVM++ PDF theme — fonts, colors, code, callout boxes
+\usepackage{fontspec}
+\setmainfont{Helvetica Neue}[
+  BoldFont = Helvetica Neue Bold,
+  ItalicFont = Helvetica Neue Italic
+]
+\setsansfont{Helvetica Neue}
+\setmonofont{Menlo}[Scale=0.88]
+
+\usepackage{xcolor}
+\usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{array}
+\usepackage{tabularx}
 \usepackage{fancyhdr}
-\usepackage{xcolor}
-\definecolor{sectioncolor}{RGB}{0,51,102}
-\usepackage{sectsty}
-\allsectionsfont{\color{sectioncolor}}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{fancyvrb}
+
+% Palette
+\definecolor{CVMBlue}{RGB}{0,82,155}
+\definecolor{CVMBlueDark}{RGB}{0,45,90}
+\definecolor{CVMAccent}{RGB}{0,168,150}
+\definecolor{CVMGray}{RGB}{245,247,250}
+\definecolor{CVMCodeFrame}{RGB}{0,82,155}
+\definecolor{CVMTextMuted}{RGB}{90,100,110}
+
+% Section styling (no numbers — visual hierarchy only)
+\titleformat{\section}
+  {\Large\bfseries\color{CVMBlueDark}}
+  {}{0em}{}[\vspace{2pt}{\color{CVMAccent}\titlerule[1.2pt]}]
+\titlespacing*{\section}{0pt}{1.4em}{0.7em}
+
+\titleformat{\subsection}
+  {\large\bfseries\color{CVMBlue}}
+  {}{0em}{}
+\titlespacing*{\subsection}{0pt}{1.1em}{0.5em}
+
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{CVMTextMuted}}
+  {}{0em}{}
+\titlespacing*{\subsubsection}{0pt}{0.9em}{0.4em}
+
+% Header / footer
 \pagestyle{fancy}
 \fancyhf{}
-\fancyhead[L]{\small\textsf{CVM++ Documentation}}
-\fancyhead[R]{\small\textsf{\leftmark}}
-\fancyfoot[C]{\thepage}
+\fancyhead[L]{\small\sffamily\color{CVMTextMuted} CVM++}
+\fancyhead[R]{\small\sffamily\color{CVMTextMuted}\leftmark}
+\fancyfoot[C]{\small\sffamily\color{CVMTextMuted}\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{CVMAccent!60}\leaders\hrule height \headrulewidth\hfill}}
+
+% Code blocks (pandoc Shaded + listings)
+\definecolor{shadecolor}{RGB}{245,247,250}
+\renewenvironment{Shaded}{%
+  \begin{tcolorbox}[
+    enhanced,breakable,
+    colback=CVMGray,colframe=CVMCodeFrame!40,
+    boxrule=0.6pt,arc=2mm,left=4pt,right=4pt,top=4pt,bottom=4pt
+  ]}{\end{tcolorbox}}
+
+\lstdefinestyle{cvmcpp}{
+  backgroundcolor=\color{CVMGray},
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  rulecolor=CVMCodeFrame!50,
+  frameround=tttt,
+  columns=fullflexible,
+  keepspaces=true
+}
+\lstset{style=cvmcpp}
+
+% Callout boxes (pandoc ::: class)
+\newtcolorbox{pipelinebox}{
+  enhanced,breakable,
+  colback=CVMBlue!4,colframe=CVMBlue,
+  fonttitle=\bfseries\sffamily\color{white},
+  coltitle=white,colbacktitle=CVMBlue,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  title=Pipeline,
+  arc=3mm,boxrule=0.8pt,left=8pt,right=8pt,top=10pt,bottom=8pt
+}
+\newenvironment{pipeline}{\begin{pipelinebox}}{\end{pipelinebox}}
+
+\newtcolorbox{infoboxinner}[1]{
+  enhanced,breakable,
+  colback=CVMAccent!5,colframe=CVMAccent,
+  fonttitle=\bfseries\sffamily\color{white},
+  coltitle=white,colbacktitle=CVMAccent,
+  attach boxed title to top left={yshift=-2mm,xshift=4mm},
+  title=#1,
+  arc=3mm,boxrule=0.8pt,left=8pt,right=8pt,top=10pt,bottom=8pt
+}
+\newenvironment{infobox}[1]{\begin{infoboxinner}{#1}}{\end{infoboxinner}}
+
+\newtcolorbox{tipbox}{
+  enhanced,breakable,
+  colback=CVMBlueDark!3,colframe=CVMBlueDark!70,
+  fonttitle=\bfseries\sffamily,
+  title=Quick tip,
+  arc=2mm,boxrule=0.6pt,left=8pt,right=8pt,top=8pt,bottom=8pt
+}
+\newenvironment{tip}{\begin{tipbox}}{\end{tipbox}}
+
+\newtcolorbox{keybox}{
+  enhanced,breakable,
+  colback=white,colframe=CVMBlue!30,
+  arc=2mm,boxrule=0.5pt,left=6pt,right=6pt,top=6pt,bottom=6pt
+}
+\newenvironment{key}{\begin{keybox}}{\end{keybox}}
+
+% Tables
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{8pt}

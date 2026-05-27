@@ -25,12 +25,14 @@ build_one() {
   local src="$1"
   local out="$2"
   local title="$3"
+  local titlepage="$4"
   echo "  → $(basename "$out")"
   pandoc "$src" \
     --defaults="$DEFAULTS" \
     --include-in-header="$ROOT/docs/pandoc/header.tex" \
+    --include-before-body="$titlepage" \
     -o "$out" \
-    -V title="$title"
+    -M title="$title"
 }
 
 echo "Building CVM++ documentation PDFs..."
@@ -39,12 +41,14 @@ echo ""
 build_one \
   "$GUIDES/01-Project-Build-Guide.md" \
   "$PDF_OUT/CVM++_01_Project_and_Build_Guide.pdf" \
-  "CVM++ Project and Build Guide"
+  "CVM++ Project and Build Guide" \
+  "$ROOT/docs/pandoc/title-01.tex"
 
 build_one \
   "$GUIDES/02-Architecture-Workflow-Guide.md" \
   "$PDF_OUT/CVM++_02_Architecture_and_Workflow_Guide.pdf" \
-  "CVM++ Architecture and Workflow Guide"
+  "CVM++ Architecture and Workflow Guide" \
+  "$ROOT/docs/pandoc/title-02.tex"
 
 echo ""
 echo "Done. Output:"
