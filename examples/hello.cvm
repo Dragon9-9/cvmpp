@@ -1,0 +1,7 @@
+// Core language smoke test
+let x = 42;
+let flag = true;
+print x;
+if (x < 100) {
+  print x + 8;
+}

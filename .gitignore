@@ -1,0 +1,33 @@
+# Build artifacts
+build/cvmpp
+build/CMakeFiles/
+build/cmake_install.cmake
+build/Makefile
+build/compile_commands.json
+*.o
+*.d
+*.a
+*.so
+*.dylib
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# Optional local overrides
+.env
+*.local
+
+# Local / non-project materials (do not publish)
+Additional Guidelines.pdf
+EvenSemProjects.pdf
+
+# LaTeX intermediates (if building docs locally)
+docs/pdf/*.aux
+docs/pdf/*.log
+docs/pdf/*.out
+docs/pdf/*.toc

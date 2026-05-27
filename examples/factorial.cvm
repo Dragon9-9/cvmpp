@@ -1,0 +1,8 @@
+// Factorial of 5 using while (prints 120)
+let n = 5;
+let result = 1;
+while (n > 0) {
+  result = result * n;
+  n = n - 1;
+}
+print result;

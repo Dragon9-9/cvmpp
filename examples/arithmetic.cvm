@@ -1,0 +1,9 @@
+// Integer arithmetic and comparisons
+let a = 20;
+let b = 6;
+print a + b;
+print a - b;
+print a * b;
+print a / b;
+print a == 20;
+print a < b;

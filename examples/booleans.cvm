@@ -1,0 +1,7 @@
+// Boolean literals and equality
+let yes = true;
+let no = false;
+print yes;
+print no;
+print yes == true;
+print yes == no;

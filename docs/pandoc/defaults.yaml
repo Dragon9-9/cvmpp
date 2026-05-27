@@ -1,0 +1,14 @@
+from: markdown
+to: pdf
+pdf-engine: xelatex
+variables:
+  documentclass: article
+  fontsize: 11pt
+  geometry: margin=2.2cm
+  colorlinks: true
+  linkcolor: blue
+  urlcolor: blue
+  toc: true
+  toc-depth: 3
+  numbersections: true
+  papersize: a4
