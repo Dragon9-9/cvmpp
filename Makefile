@@ -7,7 +7,7 @@ SRCS     := src/main.cpp src/lexer.cpp src/parser.cpp src/compiler.cpp \
             src/ui.cpp src/token.cpp src/source_loc.cpp
 TARGET   := build/cvmpp
 
-.PHONY: all clean test repl verify cmake docs
+.PHONY: all clean test repl verify cmake
 
 all: $(TARGET)
 
@@ -29,8 +29,5 @@ verify: $(TARGET)
 
 repl: $(TARGET)
 	./$(TARGET)
-
-docs:
-	./scripts/build-docs.sh
 
 test: verify
