@@ -1,55 +1,28 @@
 #!/usr/bin/env bash
-# Regenerate PDF documentation from Markdown guides.
+# Build PDF documentation (Typst — primary).
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-GUIDES="$ROOT/docs/guides"
+TYPST="$ROOT/docs/typst"
 PDF_OUT="$ROOT/docs/pdf"
-DEFAULTS="$ROOT/docs/pandoc/defaults.yaml"
 
-if ! command -v pandoc >/dev/null 2>&1; then
-  echo "error: pandoc is not installed."
-  echo "  macOS:  brew install pandoc && brew install --cask mactex-no-gui"
-  echo "  Ubuntu: sudo apt install pandoc texlive-latex-base texlive-fonts-recommended"
-  exit 1
-fi
-
-if ! command -v xelatex >/dev/null 2>&1 && ! command -v pdflatex >/dev/null 2>&1; then
-  echo "error: xelatex/pdflatex not found (install a LaTeX distribution)."
+if ! command -v typst >/dev/null 2>&1; then
+  echo "error: typst is not installed."
+  echo "  macOS: brew install typst"
   exit 1
 fi
 
 mkdir -p "$PDF_OUT"
 
-build_one() {
-  local src="$1"
-  local out="$2"
-  local title="$3"
-  local titlepage="$4"
-  echo "  → $(basename "$out")"
-  pandoc "$src" \
-    --defaults="$DEFAULTS" \
-    --include-in-header="$ROOT/docs/pandoc/header.tex" \
-    --include-before-body="$titlepage" \
-    -o "$out" \
-    -M title="$title"
-}
-
-echo "Building CVM++ documentation PDFs..."
+echo "Building CVM++ PDFs (Typst)..."
 echo ""
 
-build_one \
-  "$GUIDES/01-Project-Build-Guide.md" \
-  "$PDF_OUT/CVM++_01_Project_and_Build_Guide.pdf" \
-  "CVM++ Project and Build Guide" \
-  "$ROOT/docs/pandoc/title-01.tex"
+typst compile "$TYPST/01-project-build.typ" \
+  "$PDF_OUT/CVM++_01_Project_and_Build_Guide.pdf"
 
-build_one \
-  "$GUIDES/02-Architecture-Workflow-Guide.md" \
-  "$PDF_OUT/CVM++_02_Architecture_and_Workflow_Guide.pdf" \
-  "CVM++ Architecture and Workflow Guide" \
-  "$ROOT/docs/pandoc/title-02.tex"
+typst compile "$TYPST/02-architecture-workflow.typ" \
+  "$PDF_OUT/CVM++_02_Architecture_and_Workflow_Guide.pdf"
 
 echo ""
-echo "Done. Output:"
+echo "Done:"
 ls -la "$PDF_OUT"/*.pdf
