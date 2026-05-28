@@ -8,15 +8,101 @@
 #let ink-body = rgb("#1e293b")
 #let status-ok = rgb("#0f766e")
 
-#let doc-title(title, subtitle: none) = {
-  text(size: 18pt, weight: "bold", fill: brand-dark)[#title]
+#let doc-title(title, subtitle: none, tight: false) = {
+  text(size: if tight { 14pt } else { 18pt }, weight: "bold", fill: brand-dark)[#title]
   if subtitle != none {
-    v(0.15em)
-    text(size: 10pt, fill: ink-muted)[#subtitle]
+    v(if tight { 0.1em } else { 0.15em })
+    text(size: if tight { 9pt } else { 10pt }, fill: ink-muted)[#subtitle]
   }
-  v(0.25em)
+  v(if tight { 0.12em } else { 0.25em })
   line(length: 100%, stroke: 1.15pt + brand)
-  v(0.25em)
+  v(if tight { 0.1em } else { 0.25em })
+}
+
+#let doc-cover(title, subtitle: none, meta: none) = {
+  page(
+    header: none,
+    footer: none,
+    margin: (top: 2.4cm, bottom: 2cm, x: 2.2cm),
+  )[
+    #set align(center + horizon)
+    #v(1fr)
+    #text(size: 22pt, weight: "bold", fill: brand-dark)[#title]
+    #if subtitle != none [
+      #v(0.55em)
+      #text(size: 12pt, fill: ink-muted)[#subtitle]
+    ]
+    #v(1.2em)
+    #line(length: 42%, stroke: 1.5pt + brand)
+    #if meta != none [
+      #v(0.9em)
+      #text(size: 9.5pt, fill: ink-muted)[#meta]
+    ]
+    #v(1fr)
+    #align(left)[
+      #text(size: 8.5pt, fill: ink-muted)[
+        Companion to *Project and Build* · Pipeline: lexer → parser → compiler → VM
+      ]
+    ]
+  ]
+}
+
+#let doc-outline(depth: 2) = [
+  #pagebreak(weak: true)
+  #outline(
+    title: text(size: 13pt, weight: "bold", fill: brand-dark)[Contents],
+    depth: depth,
+    indent: auto,
+  )
+  #v(0.5em)
+  #pagebreak(weak: true)
+]
+
+// Architecture guide: no TOC, no section numbers, no page numbers, tight layout
+#let doc-setup-plain(header-label: "CVM++") = {
+  set text(font: ("Helvetica Neue", "Arial"), size: 10pt, fill: ink-body)
+  // Avoid stretched spacing from full justification in narrow columns
+  set par(justify: false, leading: 0.58em, spacing: 0.3em)
+  set block(spacing: 0.35em)
+  set figure(placement: none, gap: 0.15em)
+  // Keep caption attached to diagram — no floating / orphan captions
+  // Allow block breaking to avoid large blank page regions
+  show figure: it => block(breakable: true, above: 0.04em, below: 0.05em, width: 100%)[
+    #align(center)[#it.body]
+    #v(0.05em)
+    #text(size: 8pt, fill: ink-muted)[#it.caption]
+  ]
+  show emph: it => text(fill: brand-dark, style: "italic")[#it.body]
+  set page(
+    paper: "a4",
+    margin: (top: 1.2cm, bottom: 1.1cm, x: 1.45cm),
+    fill: white,
+    header: none,
+    footer: none,
+  )
+  set heading(numbering: none)
+  show heading.where(level: 1): it => {
+    v(0.16em)
+    text(size: 11.5pt, weight: "bold", fill: brand-dark)[#it.body]
+    v(0.08em)
+    line(length: 100%, stroke: 0.4pt + brand)
+    v(0.12em)
+  }
+  show heading.where(level: 2): it => {
+    v(0.12em)
+    text(size: 10.25pt, weight: "bold", fill: brand)[#it.body]
+    v(0.06em)
+  }
+  show raw.where(block: true): set text(font: "Menlo", size: 8.5pt)
+  show raw.where(block: true): block(
+    fill: rgb("#f1f5f9"),
+    stroke: 0.35pt + border,
+    radius: 2pt,
+    inset: 6pt,
+    width: 100%,
+    above: 0.08em,
+    below: 0.08em,
+  )
 }
 
 #let doc-setup(header-label: "CVM++") = {
@@ -118,6 +204,52 @@
   v(0.1em)
 }
 
+#let stage-head(num, title, file) = block(
+  width: 100%,
+  fill: brand-light,
+  stroke: (left: 4pt + brand),
+  inset: (left: 12pt, rest: 10pt),
+  radius: (right: 4pt),
+  above: 0.35em,
+  below: 0.2em,
+)[
+  #grid(
+    columns: (auto, 1fr, auto),
+    gutter: 10pt,
+    align: horizon,
+    box(fill: brand, inset: (x: 8pt, y: 4pt), radius: 3pt)[
+      #text(size: 9pt, weight: "bold", fill: white)[#num]
+    ],
+    text(size: 11pt, weight: "bold", fill: brand-dark)[#title],
+    text(size: 8.5pt, fill: ink-muted, font: "Menlo")[#file],
+  )
+]
+
+#let terminal(body, tight: false) = block(
+  width: 100%,
+  fill: rgb("#1e293b"),
+  radius: 4pt,
+  inset: if tight { 7pt } else { 10pt },
+  above: if tight { 0.06em } else { 0.15em },
+  below: if tight { 0.06em } else { 0.2em },
+)[
+  #set text(font: "Menlo", size: if tight { 8.25pt } else { 8.75pt }, fill: rgb("#e2e8f0"))
+  #body
+]
+
+#let tip(title, body) = block(
+  width: 100%,
+  stroke: (left: 3pt + rgb("#0f766e")),
+  fill: rgb("#ecfdf5"),
+  inset: (left: 10pt, rest: 9pt),
+  radius: (right: 3pt),
+)[
+  #text(size: 9pt, weight: "bold", fill: rgb("#0f766e"))[#title]
+  #v(0.15em)
+  #set par(spacing: 0.38em)
+  #body
+]
+
 #let callout(title, body) = block(
   width: 100%,
   stroke: (left: 3pt + brand),
@@ -132,6 +264,47 @@
 ]
 
 #let lbl(body) = text(weight: "bold", fill: brand, size: 9.5pt)[#body]
+
+#let io-block(input, output, file: none) = block(
+  width: 100%,
+  fill: surface,
+  stroke: 0.35pt + border,
+  inset: 10pt,
+  radius: 4pt,
+  above: 0.12em,
+  below: 0.2em,
+)[
+  #grid(
+    columns: (1.1cm, 1fr),
+    row-gutter: 6pt,
+    [#lbl[In]], [#input],
+    [#lbl[Out]], [#output],
+    ..if file != none { ([#lbl[File]], [#text(font: "Menlo", size: 9pt)[#file]]) },
+  )
+]
+
+#let step(num, title, file: none, body) = [
+  #block(above: 0.14em, below: 0.06em)[
+    #text(weight: "bold", fill: brand-dark)[Step #num — #title]
+    #if file != none [
+      #h(0.35em)
+      #text(size: 8.25pt, font: "Menlo", fill: ink-muted)[#file]
+    ]
+    #v(0.08em)
+    #set par(spacing: 0.28em)
+    #body
+  ]
+]
+
+#let component(num, title, file, input, output, flow, example) = [
+  #stage-head(num, title, file)
+  #io-block(input, output, file: file)
+  #v(0.12em)
+  #lbl[Flow] #h(0.35em) #flow
+  #v(0.18em)
+  #lbl[Example] #h(0.35em) #example
+  #v(0.28em)
+]
 
 #let phase-detail(files, work, verify) = [
   #v(0.12em)
@@ -290,6 +463,35 @@
   )
   v(0.12em)
 }
+
+#let tbl-tight(headers, rows) = {
+  table(
+    columns: headers.len(),
+    stroke: 0.32pt + border,
+    fill: (x, y) => if y == 0 {
+      brand-light
+    } else if calc.rem(y, 2) == 0 {
+      white
+    } else {
+      rgb("#fafbfc")
+    },
+    inset: (x: 6pt, y: 3.5pt),
+    align: (left + horizon,),
+    ..headers.map(h => table.cell(text(weight: "bold", size: 9.2pt, fill: brand-dark)[#h])),
+    ..rows.flatten().map(c => table.cell(text(size: 9.2pt)[#c])),
+  )
+}
+
+#let cvm-sample-tight(code) = {
+  raw(block: true, lang: none, code)
+}
+
+// Non-floating diagram + caption (Architecture guide — avoids page-break gaps)
+#let diagram(caption, body) = block(breakable: true, above: 0.08em, below: 0.14em, width: 100%)[
+  #body
+  #v(0.08em)
+  #text(size: 8pt, fill: ink-muted)[#caption]
+]
 
 // One build phase: short prose blocks
 #let phase-block(num, title, what, built, check) = [
